@@ -1,0 +1,33 @@
+{
+  "name": "juvees",
+  "version": "1.0.0",
+  "description": "Gaming Console E-commerce Platform",
+  "private": true,
+  "workspaces": [
+    "client",
+    "admin",
+    "rider",
+    "server",
+    "shared"
+  ],
+  "scripts": {
+    "install:all": "npm install && npm run install:client && npm run install:admin && npm run install:rider && npm run install:server",
+    "install:client": "cd client && npm install",
+    "install:admin": "cd admin && npm install",
+    "install:rider": "cd rider && npm install",
+    "install:server": "cd server && npm install",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\" \"npm run dev:admin\" \"npm run dev:rider\"",
+    "dev:client": "cd client && npm run dev",
+    "dev:admin": "cd admin && npm run dev",
+    "dev:rider": "cd rider && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "build": "npm run build:client && npm run build:admin && npm run build:rider && npm run build:server",
+    "build:client": "cd client && npm run build",
+    "build:admin": "cd admin && npm run build",
+    "build:rider": "cd rider && npm run build",
+    "build:server": "cd server && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 
