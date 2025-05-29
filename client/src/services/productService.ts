@@ -1,66 +1,41 @@
-import api from './api';
+import { api } from '../utils/api';
+import { Product } from '../store/slices/productSlice';
 
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  brand: string;
-  images: string[];
-  variants: {
-    color: string;
-    size: string;
-    stock: number;
-    price: number;
-    sku: string;
-  }[];
-  rating: number;
-  reviews: {
-    user: {
-      id: string;
-      name: string;
-    };
-    rating: number;
-    comment: string;
-    createdAt: string;
-  }[];
+class ProductService {
+  async getProducts(): Promise<Product[]> {
+    const response = await api.get('/products');
+    return response.data;
+  }
+
+  async getProductById(id: string): Promise<Product> {
+    const response = await api.get(`/products/${id}`);
+    return response.data;
+  }
+
+  async getCategories(): Promise<string[]> {
+    const response = await api.get('/products/categories');
+    return response.data;
+  }
+
+  async searchProducts(query: string): Promise<Product[]> {
+    const response = await api.get(`/products/search?q=${query}`);
+    return response.data;
+  }
+
+  async getProductsByCategory(category: string): Promise<Product[]> {
+    const response = await api.get(`/products/category/${category}`);
+    return response.data;
+  }
+
+  async getProductsByPriceRange(min: number, max: number): Promise<Product[]> {
+    const response = await api.get(`/products/price-range?min=${min}&max=${max}`);
+    return response.data;
+  }
+
+  async getProductsByRating(rating: number): Promise<Product[]> {
+    const response = await api.get(`/products/rating/${rating}`);
+    return response.data;
+  }
 }
 
-interface ProductFilters {
-  category?: string;
-  brand?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  color?: string;
-  size?: string;
-}
-
-export const productService = {
-  getProducts: async (filters?: ProductFilters): Promise<Product[]> => {
-    const response = await api.get<Product[]>('/products', { params: filters });
-    return response.data;
-  },
-
-  getProductById: async (id: string): Promise<Product> => {
-    const response = await api.get<Product>(`/products/${id}`);
-    return response.data;
-  },
-
-  getCategories: async (): Promise<string[]> => {
-    const response = await api.get<string[]>('/products/categories');
-    return response.data;
-  },
-
-  getBrands: async (): Promise<string[]> => {
-    const response = await api.get<string[]>('/products/brands');
-    return response.data;
-  },
-
-  addReview: async (
-    productId: string,
-    review: { rating: number; comment: string }
-  ): Promise<Product> => {
-    const response = await api.post<Product>(`/products/${productId}/reviews`, review);
-    return response.data;
-  },
-}; 
+export const productService = new ProductService(); 

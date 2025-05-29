@@ -19,6 +19,8 @@ import { OrderHistory } from './pages/OrderHistory';
 import { OrderDetails } from './pages/OrderDetails';
 import { Dashboard } from './pages/admin/Dashboard';
 import { OrderManagement } from './pages/admin/OrderManagement';
+import ProductList from './pages/ProductList';
+import ProductDetails from './pages/ProductDetails';
 
 const App: React.FC = () => {
   return (
@@ -30,8 +32,8 @@ const App: React.FC = () => {
             <main className="flex-grow">
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/products/:id" element={<ProductDetail />} />
+                <Route path="/products" element={<ProductList />} />
+                <Route path="/products/:productId" element={<ProductDetails />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
@@ -77,7 +79,7 @@ const App: React.FC = () => {
                 />
                 {/* Admin Routes */}
                 <Route
-                  path="/admin/orders"
+                  path="/admin/dashboard"
                   element={
                     <ProtectedRoute>
                       <Dashboard />
@@ -85,7 +87,7 @@ const App: React.FC = () => {
                   }
                 />
                 <Route
-                  path="/admin/orders/:orderId"
+                  path="/admin/orders"
                   element={
                     <ProtectedRoute>
                       <OrderManagement />

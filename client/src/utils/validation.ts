@@ -82,4 +82,101 @@ export const validateAlphabetic = (value: string): boolean => {
 
 export const validateAlphanumeric = (value: string): boolean => {
   return /^[a-zA-Z0-9\s]+$/.test(value);
+};
+
+export interface ValidationError {
+  field: string;
+  message: string;
+}
+
+export const validateShippingAddress = (address: {
+  fullName: string;
+  address: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  phone: string;
+}): ValidationError[] => {
+  const errors: ValidationError[] = [];
+
+  if (!address.fullName.trim()) {
+    errors.push({ field: 'fullName', message: 'Full name is required' });
+  }
+
+  if (!address.address.trim()) {
+    errors.push({ field: 'address', message: 'Address is required' });
+  }
+
+  if (!address.city.trim()) {
+    errors.push({ field: 'city', message: 'City is required' });
+  }
+
+  if (!address.state.trim()) {
+    errors.push({ field: 'state', message: 'State is required' });
+  }
+
+  if (!address.postalCode.trim()) {
+    errors.push({ field: 'postalCode', message: 'Postal code is required' });
+  } else if (!/^\d{5}(-\d{4})?$/.test(address.postalCode)) {
+    errors.push({
+      field: 'postalCode',
+      message: 'Please enter a valid postal code (e.g., 12345 or 12345-6789)',
+    });
+  }
+
+  if (!address.country.trim()) {
+    errors.push({ field: 'country', message: 'Country is required' });
+  }
+
+  if (!address.phone.trim()) {
+    errors.push({ field: 'phone', message: 'Phone number is required' });
+  } else if (!/^\+?[\d\s-]{10,}$/.test(address.phone)) {
+    errors.push({
+      field: 'phone',
+      message: 'Please enter a valid phone number',
+    });
+  }
+
+  return errors;
+};
+
+export const validatePaymentMethod = (payment: {
+  type: 'credit_card' | 'paypal';
+  cardNumber?: string;
+  expiryDate?: string;
+  cvv?: string;
+}): ValidationError[] => {
+  const errors: ValidationError[] = [];
+
+  if (payment.type === 'credit_card') {
+    if (!payment.cardNumber) {
+      errors.push({ field: 'cardNumber', message: 'Card number is required' });
+    } else if (!/^\d{16}$/.test(payment.cardNumber.replace(/\s/g, ''))) {
+      errors.push({
+        field: 'cardNumber',
+        message: 'Please enter a valid 16-digit card number',
+      });
+    }
+
+    if (!payment.expiryDate) {
+      errors.push({ field: 'expiryDate', message: 'Expiry date is required' });
+    } else if (!/^(0[1-9]|1[0-2])\/([0-9]{2})$/.test(payment.expiryDate)) {
+      errors.push({
+        field: 'expiryDate',
+        message: 'Please enter a valid expiry date (MM/YY)',
+      });
+    }
+
+    if (!payment.cvv) {
+      errors.push({ field: 'cvv', message: 'CVV is required' });
+    } else if (!/^\d{3,4}$/.test(payment.cvv)) {
+      errors.push({
+        field: 'cvv',
+        message: 'Please enter a valid CVV (3 or 4 digits)',
+      });
+    }
+  }
+
+  return errors;
 }; 
